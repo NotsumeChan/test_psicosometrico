@@ -1,6 +1,5 @@
 import pygame as p
 import sys    as s
-import math   as m
 import os     as os
 from datetime import datetime
 
@@ -75,7 +74,7 @@ def main():
     player = personaje()
     calle = carretera()
     
-    #generar lineas
+    #generar lineas cetrales de la calle
     lineas_cortas : list = []
     for i in range(int((400-5/40))):
         lineas_cortas.append(i*40)
@@ -83,6 +82,8 @@ def main():
     #variables extras
     reset = True
     errores : int = 0
+    erroresAux : int = 0
+    fps : int = 60
     inicio = datetime.now().strftime('%d/%m/%Y %H:%M:%S')
     
     while True:
@@ -94,6 +95,7 @@ def main():
                 with open(f"{os.getcwd()}/erroes.txt", "a") as file:#cambiar la ruta
                     fin = datetime.now().strftime('%d/%m/%Y %H:%M:%S')
                     file.write(f"\n=========================\nhora inicio:  {inicio}\nhora termino: {fin}\nerrores totales:{errores}\n=========================")
+                #cerrar el programa
                 s.exit()
                 
             #tocar el teclado    
@@ -108,7 +110,7 @@ def main():
                     player.velocidad = 0
                 if event.key == p.K_RIGHT:
                     player.velocidad = 0    
-            print(f"errores: {errores}")
+            
         
         #pintar la pantalla verde
         Screen.fill(verde)
@@ -116,7 +118,7 @@ def main():
         calle.dibujar()
         
         
-        #lineas blancas
+        #pintar lineas blancas
         for a in range(len(lineas_cortas)):
             lineas_cortas[a] += 2
             if lineas_cortas[a] > 400:
@@ -124,7 +126,7 @@ def main():
             p.draw.rect(Screen, blanco, [((size[0])/2)-5, lineas_cortas[a], 8, 20])
         ##
 
-        #movimiento
+        #movimiento jugador
         if player.x >= calle.limite_izq and player.x <= calle.limite_der:
             player.x += player.velocidad
             
@@ -147,12 +149,17 @@ def main():
         if player.x > calle.limite_izq +4 and player.x < calle.limite_der -33:
             reset = True
                 
-        #auto
+        #pintar auto
         player.dibujar()
         
-        #reset pantalla
+        #update pantalla
         p.display.flip()
-        clock.tick(60)
+        if erroresAux != errores:
+            os.system('cls')
+            print("ups te saliste")
+            print(f"errores totales: {errores}")
+            erroresAux = errores
+        clock.tick(fps)
 
         
 if __name__ == '__main__':
