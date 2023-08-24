@@ -2,72 +2,10 @@ import pygame as p
 import sys    as s
 import os     as os
 from datetime import datetime
+from classes import *
+from variables import *
 
 p.init()
-
-#definir colores
-
-blanco  = (255,255,255)
-verde   = (  0,255,  0)
-rojo    = (255,  0,  0)
-negro   = (  0,  0,  0)
-amarillo= (255,255,  0)
-celeste = (  0,170,228)
-gris    = (165,165,165)
-
-#variables
-
-size = [600,400] #ancho, altura
-Screen = p.display.set_mode(size)
-clock = p.time.Clock()
-
-class personaje():
-    def __init__(self):
-        #caracteristicas
-        self.ancho_ruedas : int = 36
-        self.largo_ruedas : int = 10
-        self.ancho_player : int = 30
-        self.largo_player : int = 40 
-        self.ancho_player : int = 30
-        self.largo_player : int = 40 
-        
-        #cordenadas
-        self.x            : int = 300
-        self.y            : int = 300
-        
-        #velocidad
-        self.velocidad    : int = 0
-        
-        
-    def dibujar(self):
-        #ruedas
-        ancho_ruedas : int = 36
-        largo_ruedas : int = 10
-        p.draw.rect(Screen,    gris, [self.x-3, self.y+5 , ancho_ruedas  , largo_ruedas  ])
-        p.draw.rect(Screen,    gris, [self.x-3, self.y+25, ancho_ruedas  , largo_ruedas  ])
-        
-        #cuerpo principal
-        p.draw.rect(Screen,    rojo, [self.x  , self.y  , self.ancho_player   , self.largo_player  ])
-        p.draw.rect(Screen, celeste, [self.x+2, self.y+1, self.ancho_player -4, self.largo_player/4])
-
-class carretera():#predibujar
-    def __init__(self) -> None:
-        self.grosor     : int = 100
-        self.centro     : int = (size[0]/2)
-        self.x          : int = self.centro - self.grosor/2
-        self.y          : int = 0
-        self.limite_izq : int = self.x + 1
-        self.limite_der : int = self.x + self.grosor -2
-    
-    def dibujar(self):
-        #calle
-        p.draw.rect(Screen, negro, [self.x, self.y, self.grosor, size[1]]) 
-        
-        #lineas delimitadoras
-        p.draw.line(Screen, amarillo, [self.limite_izq,0], [self.limite_izq,400])
-        p.draw.line(Screen, amarillo, [self.limite_der,0], [self.limite_der,400])
-
-
 
 def main():
     #generar instancias
@@ -83,6 +21,7 @@ def main():
     reset = True
     errores : int = 0
     erroresAux : int = 0
+    timmer : int = 0
     fps : int = 60
     inicio = datetime.now().strftime('%d/%m/%Y %H:%M:%S')
     
@@ -98,18 +37,9 @@ def main():
                 #cerrar el programa
                 s.exit()
                 
-            #tocar el teclado    
-            if event.type == p.KEYDOWN:
-                if event.key == p.K_LEFT:
-                    player.velocidad = -3
-                if event.key == p.K_RIGHT:
-                    player.velocidad = 3
-            #soltar el teclado
-            if event.type == p.KEYUP:
-                if event.key == p.K_LEFT:
-                    player.velocidad = 0
-                if event.key == p.K_RIGHT:
-                    player.velocidad = 0    
+            #movimiento jugador
+            player.movimiento(event)
+ 
             
         
         #pintar la pantalla verde
@@ -126,7 +56,9 @@ def main():
             p.draw.rect(Screen, blanco, [((size[0])/2)-5, lineas_cortas[a], 8, 20])
         ##
 
-        #movimiento jugador
+
+        #colision jugador
+        #tratar de ver como agregarlo a una funcion para que sea mas facil de leer
         if player.x >= calle.limite_izq and player.x <= calle.limite_der:
             player.x += player.velocidad
             
@@ -145,7 +77,8 @@ def main():
             if player.x >= calle.limite_der -32:
                 errores += 1
                 reset = False
-            
+
+        #reset contador errores    
         if player.x > calle.limite_izq +4 and player.x < calle.limite_der -33:
             reset = True
                 
@@ -153,12 +86,22 @@ def main():
         player.dibujar()
         
         #update pantalla
-        p.display.flip()
-        if erroresAux != errores:
-            os.system('cls')
+        
+        os.system('cls')
+        
+        if erroresAux != errores :
+            timmer = 120
+
+        if timmer > 0:
             print("ups te saliste")
-            print(f"errores totales: {errores}")
             erroresAux = errores
+
+        timmer -= 1
+        if timmer < 0: timmer = 0
+        print(f"errores totales: {errores}")
+
+
+        p.display.flip()
         clock.tick(fps)
 
         
