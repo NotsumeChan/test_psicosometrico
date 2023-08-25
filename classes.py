@@ -51,11 +51,25 @@ class carretera():#predibujar
         self.y          : int = 0
         self.limite_izq : int = self.x + 1
         self.limite_der : int = self.x + self.grosor -2
+        self.lineas_cortas : list = carretera.generarLineasCortas()
     
-    def dibujar(self):
+    def dibujarCalle(self):
         #calle
         p.draw.rect(Screen, negro, [self.x, self.y, self.grosor, size[1]]) 
         
         #lineas delimitadoras
         p.draw.line(Screen, amarillo, [self.limite_izq,0], [self.limite_izq,400])
         p.draw.line(Screen, amarillo, [self.limite_der,0], [self.limite_der,400])
+
+    def generarLineasCortas():
+        lineas_cortas : list = []
+        for i in range(int((400-5/40))):
+            lineas_cortas.append(i*40)
+        return lineas_cortas
+    
+    def animacionLineasCortas(self):
+        for a in range(len(self.lineas_cortas)):
+            self.lineas_cortas[a] += 2
+            if self.lineas_cortas[a] > 400:
+                self.lineas_cortas[a] = -35
+            p.draw.rect(Screen, blanco, [((size[0])/2)-5, self.lineas_cortas[a], 8, 20])

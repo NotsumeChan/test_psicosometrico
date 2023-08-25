@@ -6,32 +6,28 @@ from classes import *
 from variables import *
 
 p.init()
+clock = p.time.Clock()
 
 def main():
     #generar instancias
     player = personaje()
     calle = carretera()
     
-    #generar lineas cetrales de la calle
-    lineas_cortas : list = []
-    for i in range(int((400-5/40))):
-        lineas_cortas.append(i*40)
-    
     #variables extras
-    reset = True
-    errores : int = 0
-    erroresAux : int = 0
-    timmer : int = 0
-    fps : int = 60
-    inicio = datetime.now().strftime('%d/%m/%Y %H:%M:%S')
+    reset      : bool = True #NO repetir errores ya cometidos
+    errores    : int = 0     #contador de errores
+    erroresAux : int = 0     #comparador para mostrar por consola
+    timmer     : int = 0     #timmer para mostrar mensaje de error cometido
+    fps        : int = 60    #limitador de fps
+    inicio           = datetime.now().strftime('%d/%m/%Y %H:%M:%S')#formato fecha/hora
     
     while True:
         #buscador de eventos
         for event in p.event.get():
-            #cerrar el programa
+            #cclick boton cerrar ventana
             if event.type == p.QUIT:
                 #guardar datos archivo externo
-                with open(f"{os.getcwd()}/erroes.txt", "a") as file:#cambiar la ruta
+                with open(f"{os.getcwd()}/erroes.txt", "a") as file:#ruta dinamica del archivo de registro
                     fin = datetime.now().strftime('%d/%m/%Y %H:%M:%S')
                     file.write(f"\n=========================\nhora inicio:  {inicio}\nhora termino: {fin}\nerrores totales:{errores}\n=========================")
                 #cerrar el programa
@@ -45,17 +41,9 @@ def main():
         #pintar la pantalla verde
         Screen.fill(verde)
         #pintar la carretera
-        calle.dibujar()
-        
-        
+        calle.dibujarCalle()
         #pintar lineas blancas
-        for a in range(len(lineas_cortas)):
-            lineas_cortas[a] += 2
-            if lineas_cortas[a] > 400:
-                lineas_cortas[a] = -35
-            p.draw.rect(Screen, blanco, [((size[0])/2)-5, lineas_cortas[a], 8, 20])
-        ##
-
+        calle.animacionLineasCortas()
 
         #colision jugador
         #tratar de ver como agregarlo a una funcion para que sea mas facil de leer
