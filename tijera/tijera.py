@@ -8,7 +8,7 @@ from variables import *
 p.init()
 clock = p.time.Clock()
 
-def main():
+def Tijera():
     #generar instancias
     player = personaje()
     calle = carretera()
@@ -21,15 +21,17 @@ def main():
     fps        : int = 60    #limitador de fps
     inicio           = datetime.now().strftime('%d/%m/%Y %H:%M:%S')#formato fecha/hora
     
+    name : str = input("ingrese nombre alumno: ")
+
     while True:
         #buscador de eventos
         for event in p.event.get():
             #cclick boton cerrar ventana
             if event.type == p.QUIT:
                 #guardar datos archivo externo
-                with open(f"{os.getcwd()}/erroes.txt", "a") as file:#ruta dinamica del archivo de registro
+                with open(f"{os.getcwd()}/Historial Tijera.txt", "a") as file:#ruta dinamica del archivo de registro
                     fin = datetime.now().strftime('%d/%m/%Y %H:%M:%S')
-                    file.write(f"\n=========================\nhora inicio:  {inicio}\nhora termino: {fin}\nerrores totales:{errores}\n=========================")
+                    file.write(f"\n============{name}============\nhora inicio:  {inicio}\nhora termino: {fin}\nerrores totales:{errores}\n=========================")
                 #cerrar el programa
                 s.exit()
                 
@@ -92,5 +94,3 @@ def main():
         p.display.flip()
         clock.tick(fps)
 
-        
-main()
