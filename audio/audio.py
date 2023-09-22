@@ -4,10 +4,10 @@ import pygame
 import tempfile
 import os
 
-def audio(duracion_ms, volumen, tono, direccion):
+def audio(duracion_ms : int, volumen : int, tono : int, direccion : str) -> None:
     # Configura las características del pitido
-    frecuencia = 440 if tono == "agudo" else 220  # Cambia la frecuencia para agudo o grave
-    volumen = volumen / 100.0  # Normaliza el volumen en un rango de 0 a 1
+    frecuencia : int= tono  # Cambia la frecuencia para agudo o grave
+    volumen : float = volumen / 100.0  # Normaliza el volumen en un rango de 0 a 1
     
     # Genera el pitido usando numpy
     tiempo = np.linspace(0, duracion_ms / 1000, int(duracion_ms * 44.1))
