@@ -2,13 +2,17 @@ import pygame as p
 import sys    as s
 import os     as os
 from datetime import datetime
+
+s.path.append(f"{os.getcwd()}")
+
+
 from classes import *
 from variables import *
 
 p.init()
 clock = p.time.Clock()
 
-def Tijera():
+def tijera():
     #generar instancias
     player = personaje()
     calle = carretera()
@@ -29,7 +33,7 @@ def Tijera():
             #cclick boton cerrar ventana
             if event.type == p.QUIT:
                 #guardar datos archivo externo
-                with open(f"{os.getcwd()}/tijera/Historial Tijera.txt", "a") as file:#ruta dinamica del archivo de registro
+                with open(f"{os.getcwd()}/tijera/HistorialTijera.txt", "a") as file:#ruta dinamica del archivo de registro
                     fin = datetime.now().strftime('%d/%m/%Y %H:%M:%S')
                     file.write(f"\n============{name}============\nhora inicio:  {inicio}\nhora termino: {fin}\nerrores totales:{errores}\n=========================")
                 #cerrar el programa
@@ -94,4 +98,5 @@ def Tijera():
         p.display.flip()
         clock.tick(fps)
 
-Tijera()
+
+tijera()

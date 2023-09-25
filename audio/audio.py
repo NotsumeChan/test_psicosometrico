@@ -3,6 +3,9 @@ import numpy as np
 import pygame
 import tempfile
 import os
+import sys
+sys.path.append(f"{os.getcwd()}/audio")
+
 
 def audio(duracion_ms : int, volumen : int, tono : int, direccion : str) -> None:
     # Configura las características del pitido

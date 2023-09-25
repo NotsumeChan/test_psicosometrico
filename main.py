@@ -1,7 +1,7 @@
 import sys
 import os
-import tkinter as tk
-from tkinter import ttk
+import flet as ft
+from flet_core.control_event import ControlEvent
 
 sys.path.append(os.getcwd())
 
@@ -11,34 +11,26 @@ from reactimetro import reactimetro
 from tijera import tijera
 from visual import visual
 
+def main(page : ft.Page)  -> None:
+    page.title = "Test Psicosométrico"
+    page.vertical_alignment = ft.MainAxisAlignment.CENTER
+    page.theme_mode = "dark"
+    
 
-def ejecutar(x):
-    #ejecuta test segun boton seleccionado
-    if x == 0:
-        audio()
-    elif x == 1:
-        punteo()
-    elif x == 2:
-        reactimetro()
-    elif x == 3:
-        tijera()
-    elif x == 4:
-        visual()
-    pass
+    page.add(
+        ft.Container(
+            ft.Column(
 
-def main():
-    #crea menu con botones con tkinter para ejecutar los test
-    root = tk.Tk()
-    root.title('TEST PSICOSOMETRICO')
-    root.geometry('300x300')
-    root.configure(bg='white')
-    root.resizable(0,0)
-    #crear lista de botones
-    botones = ['Audio', 'Punteo', 'Reactimetro', 'Tijera', 'Visual']
-    #mostrar botones
-    for i in range(len(botones)):
-        ttk.Button(root, text=botones[i], command=lambda x=i: ejecutar(x)).pack(pady=10)
-    pass
+                [ft.TextButton("Audio", on_click=audio.audio()),
+                ft.TextButton("Punteo", on_click=punteo.punteo()),
+                ft.TextButton("Reactimetro", on_click=reactimetro.reactimetro()),
+                ft.TextButton("Tijera", on_click=tijera()),
+                ft.TextButton("Visual", on_click=visual.visual())],
+                alignment=ft.MainAxisAlignment.START
 
+            )
+        )
+    )
+    
 if __name__ == '__main__':
-    main()
+    ft.app(target=main)
