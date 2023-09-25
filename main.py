@@ -3,9 +3,7 @@ import os
 import tkinter as tk
 from tkinter import ttk
 
-
-path : str = os.getcwd()
-sys.path.append(path)
+sys.path.append(os.getcwd())
 
 from audio import audio
 from punteo import punteo
